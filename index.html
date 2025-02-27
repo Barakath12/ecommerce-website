@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiant Ecommerce</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Radiant Ecommerce</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showCategory('electronics')">Electronics</a></li>
+            <li><a href="#" onclick="showCategory('clothing')">Clothing</a></li>
+            <li><a href="#" onclick="showCategory('accessories')">Accessories</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div>
+            <label for="priceFilter">Filter by Price:</label>
+            <input type="range" id="priceFilter" min="0" max="500" step="10" oninput="filterByPrice()">
+            <span id="priceValue">0</span>
+        </div>
+        <div id="product-list" class="grid"></div>
+    </main>
+    <script>
+        const products = {
+            electronics: [
+                { name: "Smartphone", price: 300, image: "smartphone.jpg" },
+                { name: "Laptop", price: 700, image: "laptop.jpg" }
+            ],
+            clothing: [
+                { name: "T-Shirt", price: 20, image: "tshirt.jpg" },
+                { name: "Jeans", price: 50, image: "jeans.jpg" }
+            ],
+            accessories: [
+                { name: "Watch", price: 100, image: "watch.jpg" },
+                { name: "Sunglasses", price: 80, image: "sunglasses.jpg" }
+            ]
+        };
+
+        function showCategory(category) {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            products[category].forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("product");
+                productDiv.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price}</p>
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+
+        function filterByPrice() {
+            const priceValue = document.getElementById("priceFilter").value;
+            document.getElementById("priceValue").innerText = priceValue;
+            const productList = document.getElementById("product-list");
+            const allProducts = document.querySelectorAll(".product");
+            allProducts.forEach(product => {
+                const price = parseInt(product.querySelector("p").textContent.replace("$", ""));
+                if (price <= priceValue) {
+                    product.style.display = "block";
+                } else {
+                    product.style.display = "none";
+                }
+            });
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            text-align: center;
+        }
+        header {
+            background-color: #ff4b5c;
+            color: white;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .product {
+            background: white;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .product img {
+            max-width: 100px;
+        }
+    </style>
+</body>
+</html>
